@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Integration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <form id="emailForm" method="POST">
+            <!-- Replace with your Access Key -->
+            <input class="boxContent" type="hidden" name="access_key" value="0d8e58e4-45e6-4a4f-96de-8244474ed224">
+        
+            <!-- Form Inputs. Each input must have a name="" attribute -->
+            <input class="boxContent" type="text" name="name" placeholder="Your Name" required>
+            <input class="boxContent" type="email" name="email" placeholder="Your Email" required>
+            <textarea  class="boxContent" name="message" placeholder="Your Message" required></textarea>
+        
+            <!-- Honeypot Spam Protection -->
+            <input  class="boxContent" type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        
+            <!-- Custom Confirmation / Success Page -->
+            <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
+        
+            <button class="boxContent" type="submit">Submit Form</button>
+        </form>
+    </div>
+
+    <!-- Corrected Script for SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Event listener to handle the form submission
+        document.getElementById('emailForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from actually submitting
+            // SweetAlert2 confirmation
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your message has been sent.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                
+            });
+        });
+    </script>
+
+</body>
+</html>

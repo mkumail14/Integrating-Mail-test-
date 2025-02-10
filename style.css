@@ -1,0 +1,29 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #DCD7C9;
+}
+
+#container{
+    border: 2px solid #3F4F44;
+    border-radius: 30%;
+    display: flex;
+    width: 50vw;
+    background-color: #A27B5C;
+
+}
+
+.boxContent{
+    display: block;
+    margin: 20%;
+    background-color: #3F4F44;
+    color: #DCD7C9;
+}
+
+button{
+    background-color: #2C3930;
+    color: #DCD7C9;
+
+}
