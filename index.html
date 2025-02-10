@@ -5,46 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Integration</title>
     <link rel="stylesheet" href="style.css">
+    <!-- SweetAlert2 CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div id="container">
-        <form id="emailForm" method="POST">
-            <!-- Replace with your Access Key -->
-            <input class="boxContent" type="hidden" name="access_key" value="109f6efd-cc60-4038-ab4b-053506a24f76">
+    <div class="form-container">
+        <form method="POST" id="form">
+            <h2>Contact Us</h2>
+    
+            <input type="hidden" name="access_key" value="109f6efd-cc60-4038-ab4b-053506a24f76">
         
-            <!-- Form Inputs. Each input must have a name="" attribute -->
-            <input class="boxContent" type="text" name="name" placeholder="Your Name" required>
-            <input class="boxContent" type="email" name="email" placeholder="Your Email" required>
-            <textarea  class="boxContent" name="message" placeholder="Your Message" required></textarea>
+            <label for="name">Your Name</label>
+            <input type="text" name="name" id="name" required placeholder="Enter your name">
         
-            <!-- Honeypot Spam Protection -->
-            <input  class="boxContent" type="checkbox" name="botcheck" class="hidden" style="display: none;">
+            <label for="email">Your Email</label>
+            <input type="email" name="email" id="email" required placeholder="Enter your email">
         
-            <!-- Custom Confirmation / Success Page -->
-            <!-- <input type="hidden" name="redirect" value="https://mywebsite.com/thanks.html"> -->
+            <label for="message">Your Message</label>
+            <textarea name="message" id="message" required placeholder="Your message"></textarea>
         
-            <button class="boxContent" type="submit">Submit Form</button>
+            <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        
+            <button type="submit">Submit Form</button>
+        
+            <div id="result"></div>
         </form>
     </div>
 
-    <!-- Corrected Script for SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        // Event listener to handle the form submission
-        document.getElementById('emailForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from actually submitting
-            // SweetAlert2 confirmation
-            Swal.fire({
-                title: 'Success!',
-                text: 'Your message has been sent.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                
-            });
+        const form = document.getElementById('form');
+        const result = document.getElementById('result');
+    
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+            result.innerHTML = "Please wait..."
+        
+            fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: json
+                })
+                .then(async (response) => {
+                    let json = await response.json();
+                    if (response.status == 200) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Your message has been submitted successfully.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: json.message || 'Something went wrong!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong!',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                })
+                .then(function() {
+                    form.reset();
+                    setTimeout(() => {
+                        result.style.display = "none";
+                    }, 3000);
+                });
         });
     </script>
-
 </body>
 </html>
